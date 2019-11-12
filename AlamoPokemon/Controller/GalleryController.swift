@@ -8,22 +8,37 @@
 
 import Foundation
 import Alamofire
+import CoreData
 
-class GalleryController: GalleryControllerProtocol {
+class GalleryController: NSObject, GalleryControllerProtocol {
     
     // MARK: - Properties
     
     let reachability: NetworkReachabilityManager
     let service: PokeService
     var mons: [Pokemon] = []
+    let manager: CoreDataManager
+    lazy var frc: NSFetchedResultsController<Pokemon> = {
+        let request: NSFetchRequest<Pokemon> = Pokemon.fetchRequest()
+        let idSort = NSSortDescriptor(key: "pokeId", ascending: true)
+        request.sortDescriptors = [idSort]
+        let moc = manager.mainContext
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
+        frc.delegate = self
+        return frc
+    }()
     
     var view: GalleryViewProtocol!
     
     // MARK: - Initializers
     
-    init() {
+    override init() {
         reachability = NetworkReachabilityManager(host: "www.apple.com")!
-        service = PokeService()
+        manager = CoreDataManager()
+        let decoder = JSONDecoder()
+        decoder.userInfo[.context] = manager.mainContext
+        service = PokeService(queue: .main, decoder: decoder)
+        super.init()
     }
     
     // MARK: - Default Setup
@@ -32,6 +47,11 @@ class GalleryController: GalleryControllerProtocol {
         view = GalleryViewController()
         view.controller = self
         view.start()
+        do {
+            try frc.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
     }
     
     deinit {
@@ -47,13 +67,11 @@ class GalleryController: GalleryControllerProtocol {
             guard let self = self else { return }
             if let mon = mon {
                 self.mons.append(mon)
-                completion()
-                self.view.updateData()
             }
             else {
-                completion()
                 self.view.displayError()
             }
+            completion()
         }
     }
     

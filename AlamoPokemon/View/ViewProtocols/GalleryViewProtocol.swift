@@ -19,6 +19,10 @@ protocol GalleryViewProtocol: UIViewController {
     
     // MARK: - Data/Change Feedback Methods
     
+    func beginUpdates()
+    func endUpdates()
     func updateData()
+    func insertData(at row: Int)
+    func deleteData(at row: Int)
     func displayError()
 }

@@ -30,9 +30,27 @@ extension GalleryViewController: GalleryViewProtocol {
     
     // MARK: - UI Update Methods
     
-    func updateData() {
+    
+    func beginUpdates() {
+        tableView.beginUpdates()
+    }
+    
+    func endUpdates() {
+        tableView.endUpdates()
+    }
+    
+    func insertData(at row: Int) {
         let rows = [IndexPath(row: controller.mons.count - 1, section: 0)]
         tableView.insertRows(at: rows, with: .automatic)
+    }
+    
+    func deleteData(at row: Int) {
+        let rows = [IndexPath(row: controller.mons.count - 1, section: 0)]
+        tableView.deleteRows(at: rows, with: .automatic)
+    }
+    
+    func updateData() {
+        tableView.reloadData()
     }
     
     func displayError() {
