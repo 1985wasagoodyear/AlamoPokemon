@@ -16,6 +16,7 @@ protocol GalleryControllerProtocol {
     
     var view: GalleryViewProtocol! { get }
     var mons: [Pokemon] { get }
+    func loadMons()
     func start()
     func stop()
     
@@ -25,6 +26,7 @@ protocol GalleryControllerProtocol {
                         _ completion: @escaping ()->Void)
     func fetchImage(for index: Int,
                     _ completion: @escaping (Data?)->Void)
+    func modify(index: Int)
     
     // MARK: - Networking Accessors:
     

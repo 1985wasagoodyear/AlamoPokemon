@@ -32,6 +32,7 @@ class GalleryViewController: UIViewController {
     lazy var tableView: UITableView = {
        let t = UITableView(frame: .zero, style: .plain)
         t.dataSource = self
+        t.delegate = self
         t.register(UITableViewCell.self, forCellReuseIdentifier: REUSE_ID)
         t.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(t)

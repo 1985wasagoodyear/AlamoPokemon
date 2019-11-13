@@ -33,3 +33,9 @@ extension GalleryViewController: UITableViewDataSource {
     
 }
 
+extension GalleryViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        controller.modify(index: row)
+    }
+}

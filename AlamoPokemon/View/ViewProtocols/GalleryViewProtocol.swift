@@ -23,6 +23,7 @@ protocol GalleryViewProtocol: UIViewController {
     func endUpdates()
     func updateData()
     func insertData(at row: Int)
+    func updateData(at row: Int)
     func deleteData(at row: Int)
     func displayError()
 }

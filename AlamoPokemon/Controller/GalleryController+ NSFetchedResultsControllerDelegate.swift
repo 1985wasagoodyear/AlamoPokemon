@@ -20,18 +20,22 @@ extension GalleryController: NSFetchedResultsControllerDelegate {
                     at indexPath: IndexPath?,
                     for type: NSFetchedResultsChangeType,
                     newIndexPath: IndexPath?) {
-        guard let indexPath = indexPath else { return }
-        print(indexPath)
         switch type {
             case .delete:
-                view.deleteData(at: indexPath.row)
+                if let row = indexPath?.row {
+                    view.deleteData(at: row)
+                }
             case .insert:
-                view.insertData(at: indexPath.row)
-            default:
-                print("other handling")
+                view.insertData(at: mons.count)
+            case .update:
+                let row = indexPath?.row ?? 0
+                view.updateData(at: row)
+            case .move:
+                print("other handling for moving data around")
+            @unknown default:
+                print("unknown case handling here")
         }
     }
-    
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         view.endUpdates()

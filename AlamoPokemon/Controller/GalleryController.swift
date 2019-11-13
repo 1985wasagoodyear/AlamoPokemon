@@ -10,6 +10,12 @@ import Foundation
 import Alamofire
 import CoreData
 
+extension NetworkReachabilityManager {
+    convenience init() {
+        self.init(host: "www.apple.com")!
+    }
+}
+
 class GalleryController: NSObject, GalleryControllerProtocol {
     
     // MARK: - Properties
@@ -33,7 +39,7 @@ class GalleryController: NSObject, GalleryControllerProtocol {
     // MARK: - Initializers
     
     override init() {
-        reachability = NetworkReachabilityManager(host: "www.apple.com")!
+        reachability = NetworkReachabilityManager()
         manager = CoreDataManager()
         let decoder = JSONDecoder()
         decoder.userInfo[.context] = manager.mainContext
@@ -47,15 +53,31 @@ class GalleryController: NSObject, GalleryControllerProtocol {
         view = GalleryViewController()
         view.controller = self
         view.start()
-        do {
-            try frc.performFetch()
-        } catch {
-            fatalError("Failed to initialize FetchedResultsController: \(error)")
-        }
+        loadMons()
     }
+    
+ 
     
     deinit {
         
+    }
+    
+    // MARK: - Pokemon Accessors:
+    
+    func loadMons() {
+        do {
+            try frc.performFetch()
+            mons = frc.fetchedObjects ?? []
+        } catch {
+            fatalError("Fatal error fetching: \(error)")
+        }
+        
+    }
+    
+    func modify(index: Int) {
+        let m = mons[index]
+        m.name = m.name.capitalized
+        manager.saveMain()
     }
     
     // MARK: - Networking Accessors:
@@ -67,6 +89,7 @@ class GalleryController: NSObject, GalleryControllerProtocol {
             guard let self = self else { return }
             if let mon = mon {
                 self.mons.append(mon)
+                self.manager.saveMain()
             }
             else {
                 self.view.displayError()

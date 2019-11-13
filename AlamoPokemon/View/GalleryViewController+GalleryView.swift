@@ -30,7 +30,6 @@ extension GalleryViewController: GalleryViewProtocol {
     
     // MARK: - UI Update Methods
     
-    
     func beginUpdates() {
         tableView.beginUpdates()
     }
@@ -47,6 +46,12 @@ extension GalleryViewController: GalleryViewProtocol {
     func deleteData(at row: Int) {
         let rows = [IndexPath(row: controller.mons.count - 1, section: 0)]
         tableView.deleteRows(at: rows, with: .automatic)
+    }
+    
+    func updateData(at row: Int) {
+        let rows = [IndexPath(row: row, section: 0)]
+        tableView.reloadRows(at: rows,
+                             with: .automatic)
     }
     
     func updateData() {
