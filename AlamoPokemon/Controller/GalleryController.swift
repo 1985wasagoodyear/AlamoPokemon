@@ -21,9 +21,12 @@ class GalleryController: GalleryControllerProtocol {
     
     // MARK: - Initializers
     
-    init() {
-        reachability = NetworkReachabilityManager(host: "www.apple.com")!
-        service = PokeService()
+    init(_ service: PokeService = PokeService()) {
+        guard let reachability = NetworkReachabilityManager(host: "www.apple.com") else {
+            fatalError("Could not create NetworkReachabilityManager instance")
+        }
+        self.reachability = reachability
+        self.service = service
     }
     
     // MARK: - Default Setup
@@ -34,9 +37,7 @@ class GalleryController: GalleryControllerProtocol {
         view.start()
     }
     
-    deinit {
-        
-    }
+    deinit { }
     
     // MARK: - Networking Accessors:
     
@@ -86,7 +87,6 @@ class GalleryController: GalleryControllerProtocol {
                 }
             }
         }
-        
     }
     
     /// This must always be called sometime after using `startMonitoringNetworkChanges:queue:allowsCellular:handler`.

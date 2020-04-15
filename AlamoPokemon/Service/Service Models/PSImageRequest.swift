@@ -14,6 +14,11 @@ struct PSImageRequest {
 
 extension PSImageRequest: URLConvertible {
     func asURL() throws -> URL {
-        return URL(string: url)!
+        guard let url = URL(string: url) else {
+            throw NSError(domain: "bad url",
+                          code: 1,
+                          userInfo: ["url": url])
+        }
+        return url
     }
 }

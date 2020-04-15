@@ -16,7 +16,7 @@ extension GalleryViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: REUSE_ID,
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.reuseId,
                                                  for: indexPath)
         let row = indexPath.row
         let mon = controller.mons[row]

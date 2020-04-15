@@ -18,17 +18,14 @@ class PokeService {
     
     // MARK: - Initializers
     
-    init(queue: DispatchQueue, decoder: JSONDecoder) {
+    init(queue: DispatchQueue = .main,
+         decoder: JSONDecoder = JSONDecoder()) {
         self.queue = queue
         self.decoder = decoder
     }
     
-    convenience init() {
-        self.init(queue: DispatchQueue.main,
-                  decoder: JSONDecoder())
-    }
-    
     // MARK: - Network Access Methods
+    
     func requestPokemon(_ request: PSMonRequest,
                         _ completion: @escaping (Pokemon?)->Void) {
         AF.request(request)

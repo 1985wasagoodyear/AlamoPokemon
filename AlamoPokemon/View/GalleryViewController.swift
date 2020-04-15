@@ -11,9 +11,9 @@ import MBProgressHUD
 
 class GalleryViewController: UIViewController {
 
-    // MARK: - Constants
-    
-    let REUSE_ID = "reuseID"
+    enum Constants {
+        static let reuseId = "cellReuseID"
+    }
     
     // MARK: - Properties
     
@@ -22,20 +22,20 @@ class GalleryViewController: UIViewController {
     // MARK: - UI Properties
 
     lazy var searchBar: UISearchBar = {
-       let s = UISearchBar(frame: .zero)
-        s.delegate = self
-        s.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(s)
-        return s
+        let searchBar = UISearchBar(frame: .zero)
+        searchBar.delegate = self
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchBar)
+        return searchBar
     }()
     
     lazy var tableView: UITableView = {
-       let t = UITableView(frame: .zero, style: .plain)
-        t.dataSource = self
-        t.register(UITableViewCell.self, forCellReuseIdentifier: REUSE_ID)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(t)
-        return t
+        let table = UITableView(frame: .zero, style: .plain)
+        table.dataSource = self
+        table.register(UITableViewCell.self, forCellReuseIdentifier: Constants.reuseId)
+        table.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(table)
+        return table
     }()
     
     // MARK: - Lifecycle Methods
@@ -49,19 +49,16 @@ class GalleryViewController: UIViewController {
     // MARK: - Setup Methods
     
     private func setupConstraints() {
-        let s = searchBar
-        let t = tableView
-        let v = view!
         let sConst = [
-            s.topAnchor.constraint(equalTo: v.layoutMarginsGuide.topAnchor),
-            s.leadingAnchor.constraint(equalTo: v.leadingAnchor),
-            s.trailingAnchor.constraint(equalTo: v.trailingAnchor)
+            searchBar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ]
         let tConst = [
-            t.topAnchor.constraint(equalTo: s.bottomAnchor),
-            t.leadingAnchor.constraint(equalTo: v.leadingAnchor),
-            t.trailingAnchor.constraint(equalTo: v.trailingAnchor),
-            t.bottomAnchor.constraint(equalTo: v.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
         NSLayoutConstraint.activate(sConst + tConst)
     }
@@ -83,7 +80,6 @@ class GalleryViewController: UIViewController {
 
 }
 
-
 extension GalleryViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let query = searchBar.text, !query.isEmpty else { return }
@@ -94,5 +90,3 @@ extension GalleryViewController: UISearchBarDelegate {
         }
     }
 }
-
-

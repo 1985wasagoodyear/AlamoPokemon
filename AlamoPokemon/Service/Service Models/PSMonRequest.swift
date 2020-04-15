@@ -17,6 +17,11 @@ struct PSMonRequest {
 
 extension PSMonRequest: URLConvertible {
     func asURL() throws -> URL {
-        return URL(string: request)!
+        guard let url = URL(string: request) else {
+            throw NSError(domain: "bad url",
+                          code: 1,
+                          userInfo: ["url": request])
+        }
+        return url
     }
 }
